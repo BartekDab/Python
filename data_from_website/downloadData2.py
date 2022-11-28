@@ -1,9 +1,13 @@
 from lxml import html #pip install lxml
 import requests #pip install requests
 from requests import get
+import os
+from datetime import datetime
 
 plik = "wynik.txt"
-
+hh = str(datetime.now().hour)
+mm = str(datetime.now().minute)
+ss = str(datetime.now().second)
 siteNumber = 1
 url = "https://www.leroymerlin.pl/zabezpieczenie-domu/systemy-smart-home,a3358,strona-" + str(siteNumber) +".html"
 # urlCheck = get(url)
@@ -23,12 +27,14 @@ while get(url).ok:#urlCheck.ok
         products = tree.xpath(xpath_selector)
         #print("\nStrona: " + str(siteNumber))
         # print(url)
-        lista =lista + "\nStrona: " + str(siteNumber)
+        lista =lista + "\nStrona: " + str(siteNumber) +"\n" + url +"\n"
         for product in products:
             lista=lista+product.strip()+"\n"
             # print(product.strip())
         siteNumber+=1
 
+if os.path.isfile(plik):
+    plik = "wynik_"+hh+mm+ss +".txt"
 f = open(plik,"w")
 f.write(lista)
 f.close()
